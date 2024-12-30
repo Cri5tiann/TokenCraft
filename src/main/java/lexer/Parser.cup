@@ -1,0 +1,106 @@
+import java_cup.runtime.*;
+
+/* Terminal tokens */
+terminal FUNCTION, IF, ELSE, FOR, RETURN, TRUE, FALSE;
+terminal PLUS, MINUS, TIMES, DIVIDE, MOD;
+terminal INCREMENT, DECREMENT;
+terminal ASSIGN, EQUALS, OR, AND;
+terminal LESSEQUAL, GREATEREQUAL, LESS, GREATER;
+terminal LPAREN, RPAREN, LBRACE, RBRACE;
+terminal SEMICOLON, COMMA;
+terminal INPUT_INT, OUTPUT_INT;
+terminal String IDENTIFIER;
+terminal Integer INTEGER_LITERAL;
+
+/* Non-terminals */
+non terminal program, function_declaration, statement_list, statement;
+non terminal expression, term, factor;
+
+/* Precedences */
+precedence left OR;
+precedence left AND;
+precedence left EQUALS;
+precedence left LESS, LESSEQUAL, GREATER, GREATEREQUAL;
+precedence left PLUS, MINUS;
+precedence left TIMES, DIVIDE, MOD;
+precedence right INCREMENT, DECREMENT;
+precedence left ELSE;   // Add precedence for ELSE to resolve the dangling else
+
+/* Start with the program */
+start with program;
+
+/* Grammar rules */
+program ::= function_declaration:f
+    {: RESULT = new Node("Program"); RESULT.addChild(f); :};
+
+function_declaration ::= FUNCTION IDENTIFIER:id LPAREN RPAREN LBRACE statement_list:sl RBRACE
+    {: RESULT = new Node("Function: " + id); RESULT.addChild(sl); :};
+
+statement_list ::= statement:s
+    {: RESULT = new Node("Statement List"); RESULT.addChild(s); :}
+    | statement_list:sl statement:s
+    {: RESULT = sl; RESULT.addChild(s); :};
+
+statement ::= expression:e SEMICOLON
+    {: RESULT = new Node("Statement"); RESULT.addChild(e); :}
+    | IF LPAREN expression:e RPAREN statement:s
+    {: RESULT = new Node("If Statement"); RESULT.addChild(e); RESULT.addChild(s); :}
+    | IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2
+    {: RESULT = new Node("If-Else Statement"); RESULT.addChild(e); RESULT.addChild(s1); RESULT.addChild(s2); :}
+    | FOR LPAREN expression:e1 SEMICOLON expression:e2 SEMICOLON expression:e3 RPAREN statement:s
+    {: RESULT = new Node("For Loop"); RESULT.addChild(e1); RESULT.addChild(e2); RESULT.addChild(e3); RESULT.addChild(s); :}
+    | RETURN expression:e SEMICOLON
+    {: RESULT = new Node("Return"); RESULT.addChild(e); :}
+    | RETURN SEMICOLON
+    {: RESULT = new Node("Return Void"); :};
+
+expression ::= term:t
+    {: RESULT = t; :}
+    | expression:e PLUS term:t
+    {: RESULT = new Node("+"); RESULT.addChild(e); RESULT.addChild(t); :}
+    | expression:e MINUS term:t
+    {: RESULT = new Node("-"); RESULT.addChild(e); RESULT.addChild(t); :}
+    | expression:e LESS term:t
+    {: RESULT = new Node("<"); RESULT.addChild(e); RESULT.addChild(t); :}
+    | expression:e LESSEQUAL term:t
+    {: RESULT = new Node("<="); RESULT.addChild(e); RESULT.addChild(t); :}
+    | expression:e GREATER term:t
+    {: RESULT = new Node(">"); RESULT.addChild(e); RESULT.addChild(t); :}
+    | expression:e GREATEREQUAL term:t
+    {: RESULT = new Node(">="); RESULT.addChild(e); RESULT.addChild(t); :}
+    | expression:e EQUALS term:t
+    {: RESULT = new Node("=="); RESULT.addChild(e); RESULT.addChild(t); :}
+    | expression:e AND term:t
+    {: RESULT = new Node("&&"); RESULT.addChild(e); RESULT.addChild(t); :}
+    | expression:e OR term:t
+    {: RESULT = new Node("||"); RESULT.addChild(e); RESULT.addChild(t); :}
+    | IDENTIFIER:id ASSIGN expression:e
+    {: RESULT = new Node("="); RESULT.addChild(new Node(id)); RESULT.addChild(e); :}
+    | IDENTIFIER:id INCREMENT
+    {: RESULT = new Node("++"); RESULT.addChild(new Node(id)); :}
+    | IDENTIFIER:id DECREMENT
+    {: RESULT = new Node("--"); RESULT.addChild(new Node(id)); :}
+    | TRUE
+    {: RESULT = new Node("true"); :}
+    | FALSE
+    {: RESULT = new Node("false"); :};
+
+term ::= factor:f
+    {: RESULT = f; :}
+    | term:t TIMES factor:f
+    {: RESULT = new Node("*"); RESULT.addChild(t); RESULT.addChild(f); :}
+    | term:t DIVIDE factor:f
+    {: RESULT = new Node("/"); RESULT.addChild(t); RESULT.addChild(f); :}
+    | term:t MOD factor:f
+    {: RESULT = new Node("%"); RESULT.addChild(t); RESULT.addChild(f); :};
+
+factor ::= INTEGER_LITERAL:i
+    {: RESULT = new Node(i.toString()); :}
+    | IDENTIFIER:id
+    {: RESULT = new Node(id); :}
+    | LPAREN expression:e RPAREN
+    {: RESULT = e; :}
+    | INPUT_INT LPAREN RPAREN
+    {: RESULT = new Node("input_int()"); :}
+    | OUTPUT_INT LPAREN expression:e RPAREN
+    {: RESULT = new Node("output_int"); RESULT.addChild(e); :};
