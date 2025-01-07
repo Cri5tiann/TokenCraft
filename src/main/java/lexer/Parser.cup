@@ -15,6 +15,7 @@ terminal Integer INTEGER_LITERAL;
 /* Non-terminals */
 non terminal program, function_declaration, statement_list, statement;
 non terminal expression, term, factor;
+non terminal parameter_list, parameter;
 
 /* Precedences */
 precedence left OR;
@@ -32,42 +33,90 @@ start with program;
 /* Grammar rules */
 program ::= function_declaration:f
     {:
+        System.out.println("Creating Program node");
         RESULT = new Node("Program");
         ((Node) RESULT).addChild((Node) f);
     :};
 
 function_declaration ::= FUNCTION IDENTIFIER:id LPAREN RPAREN LBRACE statement_list:sl RBRACE
     {:
+        System.out.println("Creating Function node: " + id);
         RESULT = new Node("Function: " + id);
         ((Node) RESULT).addChild((Node) sl);
+    :}
+    | FUNCTION IDENTIFIER:id LPAREN parameter_list:pl RPAREN LBRACE statement_list:sl RBRACE
+    {:
+        System.out.println("Creating Function node with parameters: " + id);
+        RESULT = new Node("Function: " + id);
+        ((Node) RESULT).addChild((Node) pl);
+        ((Node) RESULT).addChild((Node) sl);
+    :};
+
+parameter_list ::= parameter:p
+    {:
+        RESULT = new Node("Parameters");
+        ((Node) RESULT).addChild((Node) p);
+    :}
+    | parameter_list:pl COMMA parameter:p
+    {:
+        RESULT = pl;
+        ((Node) RESULT).addChild((Node) p);
+    :};
+
+parameter ::= IDENTIFIER:id
+    {:
+        RESULT = new Node("Parameter: " + id);
     :};
 
 statement_list ::= statement:s
     {:
-        System.out.println("Adding statement: " + s);
-        RESULT = new Node("Statement List");
-        ((Node) RESULT).addChild((Node) s);
+        System.out.println("Creating new statement list with single statement");
+        Node list = new Node("Statement List");
+        list.addChild((Node) s);
+        RESULT = list;
     :}
     | statement_list:sl statement:s
     {:
-        System.out.println("Adding statement to list: " + s);
-        RESULT = sl;
-        ((Node) RESULT).addChild((Node) s);
+        System.out.println("Adding statement to existing list");
+        // Important: Create a new list to avoid reference issues
+        Node newList = new Node("Statement List");
+        // Copy existing children
+        for (Node child : ((Node)sl).getChildren()) {
+            newList.addChild(child);
+        }
+        // Add new statement
+        newList.addChild((Node) s);
+        RESULT = newList;
     :};
 
 statement ::= expression:e SEMICOLON
     {:
+        System.out.println("Creating expression statement");
         RESULT = new Node("Statement");
         ((Node) RESULT).addChild((Node) e);
     :}
+    | RETURN expression:e SEMICOLON
+    {:
+        System.out.println("Creating return statement with expression");
+        Node returnNode = new Node("Return");
+        returnNode.addChild((Node) e);
+        RESULT = returnNode;
+    :}
+    | RETURN SEMICOLON
+    {:
+        System.out.println("Creating void return statement");
+        RESULT = new Node("Return Void");
+    :}
     | IF LPAREN expression:e RPAREN statement:s
     {:
+        System.out.println("Creating if statement");
         RESULT = new Node("If Statement");
         ((Node) RESULT).addChild((Node) e);
         ((Node) RESULT).addChild((Node) s);
     :}
     | IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2
     {:
+        System.out.println("Creating if-else statement");
         RESULT = new Node("If-Else Statement");
         ((Node) RESULT).addChild((Node) e);
         ((Node) RESULT).addChild((Node) s1);
@@ -75,20 +124,16 @@ statement ::= expression:e SEMICOLON
     :}
     | FOR LPAREN expression:e1 SEMICOLON expression:e2 SEMICOLON expression:e3 RPAREN statement:s
     {:
+        System.out.println("Creating for loop");
         RESULT = new Node("For Loop");
         ((Node) RESULT).addChild((Node) e1);
         ((Node) RESULT).addChild((Node) e2);
         ((Node) RESULT).addChild((Node) e3);
         ((Node) RESULT).addChild((Node) s);
     :}
-    | RETURN expression:e SEMICOLON
+    | LBRACE statement_list:sl RBRACE
     {:
-        RESULT = new Node("Return");
-        ((Node) RESULT).addChild((Node) e);
-    :}
-    | RETURN SEMICOLON
-    {:
-        RESULT = new Node("Return Void");
+        RESULT = sl;
     :};
 
 expression ::= term:t
@@ -199,22 +244,16 @@ term ::= factor:f
 
 factor ::= INTEGER_LITERAL:i
     {:
+        System.out.println("Creating integer literal node: " + i);
         RESULT = new Node(i.toString());
     :}
     | IDENTIFIER:id
     {:
+        System.out.println("Creating identifier node: " + id);
         RESULT = new Node(id);
     :}
     | LPAREN expression:e RPAREN
     {:
+        System.out.println("Creating parenthesized expression");
         RESULT = e;
-    :}
-    | INPUT_INT LPAREN RPAREN
-    {:
-        RESULT = new Node("input_int()");
-    :}
-    | OUTPUT_INT LPAREN expression:e RPAREN
-    {:
-        RESULT = new Node("output_int");
-        ((Node) RESULT).addChild((Node) e);
     :};
