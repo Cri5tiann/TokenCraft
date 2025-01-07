@@ -22,17 +22,21 @@ public class Node {
 
     private String printTree(Node node, String prefix, boolean isTail) {
         StringBuilder sb = new StringBuilder();
-        sb.append(prefix).append(isTail ? "└── " : "├── ").append(node.value).append("\n");
 
+        // Print current node
+        sb.append(prefix)
+                .append(isTail ? "|__ " : "|-- ")
+                .append(node.value)
+                .append("\n");
+
+        // Print children
         for (int i = 0; i < node.children.size(); i++) {
             boolean isLastChild = (i == node.children.size() - 1);
-            sb.append(printTree(node.children.get(i), prefix + (isTail ? "    " : "│   "), isLastChild));
+            sb.append(printTree(node.children.get(i),
+                    prefix + (isTail ? "    " : "|   "),
+                    isLastChild));
         }
 
-        if (node.children.size() > 0) {
-            sb.append(printTree(node.children.get(node.children.size() - 1),
-                    prefix + (isTail ? "    " : "│   "), true));
-        }
         return sb.toString();
     }
 }
