@@ -9,16 +9,3 @@ function isPrime(n) {
     }
     return true;
 }
-
-// Main function
-function main() {
-    var n = input_int();
-
-    // Loop through all numbers from 0 to n-1
-    for (var i = 0; i <= n - 1; ++i) {
-        if (isPrime(i)) {
-            output_int(i);
-        }
-    }
-    return 0;
-}

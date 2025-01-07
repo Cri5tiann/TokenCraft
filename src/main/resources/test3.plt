@@ -1,4 +1,4 @@
-function prime() {
+function isPrime(n) {
     if (n == 2) return true;
     else if (n < 2 || n % 2 == 0) return false;
 
@@ -8,17 +8,4 @@ function prime() {
         }
     }
     return true;
-}
-
-// Main function
-function main() {
-    var n = input_int();
-
-    // Loop through all numbers from 0 to n-1
-    for (var i = 0; i <= n - 1; ++i) {
-        if (isPrime(i)) {
-            output_int(i);
-        }
-    }
-    return 0;
 }
