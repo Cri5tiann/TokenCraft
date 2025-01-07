@@ -1,12 +1,13 @@
 import java_cup.runtime.Symbol;
 import lexer.Lexer;
+import lexer.sym;
 
 import java.io.FileReader;
 
 public class TestLexer {
     public static void main(String[] args) throws Exception {
         // Specify the filename directly here
-        String filename = "E:\\cod\\demo\\Lexer-Parser-PLT\\src\\main\\resources\\test2.plt";
+        String filename = "E:\\cod\\demo\\Lexer-Parser-PLT\\src\\main\\resources\\test3.plt";
 
         // Open the file for reading
         try (FileReader fileReader = new FileReader(filename)) {

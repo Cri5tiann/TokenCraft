@@ -31,76 +31,190 @@ start with program;
 
 /* Grammar rules */
 program ::= function_declaration:f
-    {: RESULT = new Node("Program"); RESULT.addChild(f); :};
+    {:
+        RESULT = new Node("Program");
+        ((Node) RESULT).addChild((Node) f);
+    :};
 
 function_declaration ::= FUNCTION IDENTIFIER:id LPAREN RPAREN LBRACE statement_list:sl RBRACE
-    {: RESULT = new Node("Function: " + id); RESULT.addChild(sl); :};
+    {:
+        RESULT = new Node("Function: " + id);
+        ((Node) RESULT).addChild((Node) sl);
+    :};
 
 statement_list ::= statement:s
-    {: RESULT = new Node("Statement List"); RESULT.addChild(s); :}
+    {:
+        System.out.println("Adding statement: " + s);
+        RESULT = new Node("Statement List");
+        ((Node) RESULT).addChild((Node) s);
+    :}
     | statement_list:sl statement:s
-    {: RESULT = sl; RESULT.addChild(s); :};
+    {:
+        System.out.println("Adding statement to list: " + s);
+        RESULT = sl;
+        ((Node) RESULT).addChild((Node) s);
+    :};
 
 statement ::= expression:e SEMICOLON
-    {: RESULT = new Node("Statement"); RESULT.addChild(e); :}
+    {:
+        RESULT = new Node("Statement");
+        ((Node) RESULT).addChild((Node) e);
+    :}
     | IF LPAREN expression:e RPAREN statement:s
-    {: RESULT = new Node("If Statement"); RESULT.addChild(e); RESULT.addChild(s); :}
+    {:
+        RESULT = new Node("If Statement");
+        ((Node) RESULT).addChild((Node) e);
+        ((Node) RESULT).addChild((Node) s);
+    :}
     | IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2
-    {: RESULT = new Node("If-Else Statement"); RESULT.addChild(e); RESULT.addChild(s1); RESULT.addChild(s2); :}
+    {:
+        RESULT = new Node("If-Else Statement");
+        ((Node) RESULT).addChild((Node) e);
+        ((Node) RESULT).addChild((Node) s1);
+        ((Node) RESULT).addChild((Node) s2);
+    :}
     | FOR LPAREN expression:e1 SEMICOLON expression:e2 SEMICOLON expression:e3 RPAREN statement:s
-    {: RESULT = new Node("For Loop"); RESULT.addChild(e1); RESULT.addChild(e2); RESULT.addChild(e3); RESULT.addChild(s); :}
+    {:
+        RESULT = new Node("For Loop");
+        ((Node) RESULT).addChild((Node) e1);
+        ((Node) RESULT).addChild((Node) e2);
+        ((Node) RESULT).addChild((Node) e3);
+        ((Node) RESULT).addChild((Node) s);
+    :}
     | RETURN expression:e SEMICOLON
-    {: RESULT = new Node("Return"); RESULT.addChild(e); :}
+    {:
+        RESULT = new Node("Return");
+        ((Node) RESULT).addChild((Node) e);
+    :}
     | RETURN SEMICOLON
-    {: RESULT = new Node("Return Void"); :};
+    {:
+        RESULT = new Node("Return Void");
+    :};
 
 expression ::= term:t
-    {: RESULT = t; :}
+    {:
+        RESULT = t;
+    :}
     | expression:e PLUS term:t
-    {: RESULT = new Node("+"); RESULT.addChild(e); RESULT.addChild(t); :}
+    {:
+        RESULT = new Node("+");
+        ((Node) RESULT).addChild((Node) e);
+        ((Node) RESULT).addChild((Node) t);
+    :}
     | expression:e MINUS term:t
-    {: RESULT = new Node("-"); RESULT.addChild(e); RESULT.addChild(t); :}
+    {:
+        RESULT = new Node("-");
+        ((Node) RESULT).addChild((Node) e);
+        ((Node) RESULT).addChild((Node) t);
+    :}
     | expression:e LESS term:t
-    {: RESULT = new Node("<"); RESULT.addChild(e); RESULT.addChild(t); :}
+    {:
+        RESULT = new Node("<");
+        ((Node) RESULT).addChild((Node) e);
+        ((Node) RESULT).addChild((Node) t);
+    :}
     | expression:e LESSEQUAL term:t
-    {: RESULT = new Node("<="); RESULT.addChild(e); RESULT.addChild(t); :}
+    {:
+        RESULT = new Node("<=");
+        ((Node) RESULT).addChild((Node) e);
+        ((Node) RESULT).addChild((Node) t);
+    :}
     | expression:e GREATER term:t
-    {: RESULT = new Node(">"); RESULT.addChild(e); RESULT.addChild(t); :}
+    {:
+        RESULT = new Node(">");
+        ((Node) RESULT).addChild((Node) e);
+        ((Node) RESULT).addChild((Node) t);
+    :}
     | expression:e GREATEREQUAL term:t
-    {: RESULT = new Node(">="); RESULT.addChild(e); RESULT.addChild(t); :}
+    {:
+        RESULT = new Node(">=");
+        ((Node) RESULT).addChild((Node) e);
+        ((Node) RESULT).addChild((Node) t);
+    :}
     | expression:e EQUALS term:t
-    {: RESULT = new Node("=="); RESULT.addChild(e); RESULT.addChild(t); :}
+    {:
+        RESULT = new Node("==");
+        ((Node) RESULT).addChild((Node) e);
+        ((Node) RESULT).addChild((Node) t);
+    :}
     | expression:e AND term:t
-    {: RESULT = new Node("&&"); RESULT.addChild(e); RESULT.addChild(t); :}
+    {:
+        RESULT = new Node("&&");
+        ((Node) RESULT).addChild((Node) e);
+        ((Node) RESULT).addChild((Node) t);
+    :}
     | expression:e OR term:t
-    {: RESULT = new Node("||"); RESULT.addChild(e); RESULT.addChild(t); :}
+    {:
+        RESULT = new Node("||");
+        ((Node) RESULT).addChild((Node) e);
+        ((Node) RESULT).addChild((Node) t);
+    :}
     | IDENTIFIER:id ASSIGN expression:e
-    {: RESULT = new Node("="); RESULT.addChild(new Node(id)); RESULT.addChild(e); :}
+    {:
+        RESULT = new Node("=");
+        ((Node) RESULT).addChild(new Node(id));
+        ((Node) RESULT).addChild((Node) e);
+    :}
     | IDENTIFIER:id INCREMENT
-    {: RESULT = new Node("++"); RESULT.addChild(new Node(id)); :}
+    {:
+        RESULT = new Node("++");
+        ((Node) RESULT).addChild(new Node(id));
+    :}
     | IDENTIFIER:id DECREMENT
-    {: RESULT = new Node("--"); RESULT.addChild(new Node(id)); :}
+    {:
+        RESULT = new Node("--");
+        ((Node) RESULT).addChild(new Node(id));
+    :}
     | TRUE
-    {: RESULT = new Node("true"); :}
+    {:
+        RESULT = new Node("true");
+    :}
     | FALSE
-    {: RESULT = new Node("false"); :};
+    {:
+        RESULT = new Node("false");
+    :};
 
 term ::= factor:f
-    {: RESULT = f; :}
+    {:
+        RESULT = f;
+    :}
     | term:t TIMES factor:f
-    {: RESULT = new Node("*"); RESULT.addChild(t); RESULT.addChild(f); :}
+    {:
+        RESULT = new Node("*");
+        ((Node) RESULT).addChild((Node) t);
+        ((Node) RESULT).addChild((Node) f);
+    :}
     | term:t DIVIDE factor:f
-    {: RESULT = new Node("/"); RESULT.addChild(t); RESULT.addChild(f); :}
+    {:
+        RESULT = new Node("/");
+        ((Node) RESULT).addChild((Node) t);
+        ((Node) RESULT).addChild((Node) f);
+    :}
     | term:t MOD factor:f
-    {: RESULT = new Node("%"); RESULT.addChild(t); RESULT.addChild(f); :};
+    {:
+        RESULT = new Node("%");
+        ((Node) RESULT).addChild((Node) t);
+        ((Node) RESULT).addChild((Node) f);
+    :};
 
 factor ::= INTEGER_LITERAL:i
-    {: RESULT = new Node(i.toString()); :}
+    {:
+        RESULT = new Node(i.toString());
+    :}
     | IDENTIFIER:id
-    {: RESULT = new Node(id); :}
+    {:
+        RESULT = new Node(id);
+    :}
     | LPAREN expression:e RPAREN
-    {: RESULT = e; :}
+    {:
+        RESULT = e;
+    :}
     | INPUT_INT LPAREN RPAREN
-    {: RESULT = new Node("input_int()"); :}
+    {:
+        RESULT = new Node("input_int()");
+    :}
     | OUTPUT_INT LPAREN expression:e RPAREN
-    {: RESULT = new Node("output_int"); RESULT.addChild(e); :};
+    {:
+        RESULT = new Node("output_int");
+        ((Node) RESULT).addChild((Node) e);
+    :};
