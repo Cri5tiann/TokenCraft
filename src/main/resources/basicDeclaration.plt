@@ -1,4 +1,4 @@
-function complexCalculation(inputValue) {
+function basicDeclaration(inputValue) {
     result = 0;
     counter = 0;
     maxIterations = 100;

@@ -1,6 +1,7 @@
-package lexer;
-
 import java_cup.runtime.Symbol;
+import lexer.Lexer;
+import utils.Node;
+import parser.Parser;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,7 +9,7 @@ import java.io.IOException;
 public class TestParser {
     public static void main(String[] args) {
         // Path to your .plt file
-        String filePath = "E:\\cod\\demo\\Lexer-Parser-PLT\\src\\main\\resources\\test2.plt";
+        String filePath = "E:\\cod\\demo\\Lexer-Parser-PLT\\src\\main\\resources\\basicDeclaration.plt";
 
         try {
             // Create a FileReader to read the .plt file
