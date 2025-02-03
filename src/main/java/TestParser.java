@@ -9,7 +9,7 @@ import java.io.IOException;
 public class TestParser {
     public static void main(String[] args) {
         // Path to your .plt file
-        String filePath = "E:\\cod\\demo\\Lexer-Parser-PLT\\src\\main\\resources\\basicDeclaration.plt";
+        String filePath = "E:\\cod\\demo\\Lexer-Parser-PLT\\src\\main\\resources\\FibonacciNumbers.plt";
 
         try {
             // Create a FileReader to read the .plt file

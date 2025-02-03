@@ -30,7 +30,6 @@ precedence left ELSE;   // Add precedence for ELSE to resolve the dangling else
 /* Start with the program */
 start with program;
 
-/* The grammar rules follow */
 
 program ::= function_declaration:f
     {:
