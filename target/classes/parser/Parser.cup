@@ -1,0 +1,280 @@
+import java_cup.runtime.*;
+
+/* Terminal tokens */
+terminal FUNCTION, IF, ELSE, FOR, RETURN, TRUE, FALSE;
+terminal PLUS, MINUS, TIMES, DIVIDE, MOD;
+terminal INCREMENT, DECREMENT;
+terminal ASSIGN, EQUALS, OR, AND;
+terminal LESSEQUAL, GREATEREQUAL, LESS, GREATER;
+terminal LPAREN, RPAREN, LBRACE, RBRACE;
+terminal SEMICOLON, COMMA;
+terminal INPUT_INT, OUTPUT_INT;
+terminal String IDENTIFIER;
+terminal Integer INTEGER_LITERAL;
+
+/* Non-terminals */
+non terminal program, function_declaration, statement_list, statement;
+non terminal expression, term, factor;
+non terminal parameter_list, parameter;
+
+/* Precedences */
+precedence left OR;
+precedence left AND;
+precedence left EQUALS;
+precedence left LESS, LESSEQUAL, GREATER, GREATEREQUAL;
+precedence left PLUS, MINUS;
+precedence left TIMES, DIVIDE, MOD;
+precedence right INCREMENT, DECREMENT;
+precedence left ELSE;   // Add precedence for ELSE to resolve the dangling else
+
+/* Start with the program */
+start with program;
+
+
+program ::= function_declaration:f
+    {:
+        System.out.println("Creating Program node");
+        RESULT = new Node("Program");
+        ((Node) RESULT).addChild((Node) f);
+    :};
+
+function_declaration ::= FUNCTION IDENTIFIER:id LPAREN RPAREN LBRACE statement_list:sl RBRACE
+    {:
+        System.out.println("Creating Function node: " + id);
+        RESULT = new Node("Function: " + id);
+        ((Node) RESULT).addChild((Node) sl);
+    :}
+    | FUNCTION IDENTIFIER:id LPAREN parameter_list:pl RPAREN LBRACE statement_list:sl RBRACE
+    {:
+        System.out.println("Creating Function node with parameters: " + id);
+        RESULT = new Node("Function: " + id);
+        ((Node) RESULT).addChild((Node) pl);
+        ((Node) RESULT).addChild((Node) sl);
+    :};
+
+parameter_list ::= parameter:p
+    {:
+        RESULT = new Node("Parameters");
+        ((Node) RESULT).addChild((Node) p);
+    :}
+    | parameter_list:pl COMMA parameter:p
+    {:
+        RESULT = pl;
+        ((Node) RESULT).addChild((Node) p);
+    :};
+
+parameter ::= IDENTIFIER:id
+    {:
+        RESULT = new Node("Parameter: " + id);
+    :};
+
+statement_list ::= statement:s
+    {:
+        System.out.println("Creating new statement list with single statement");
+        Node list = new Node("Statement List");
+        list.addChild((Node) s);
+        RESULT = list;
+    :}
+    | statement_list:sl statement:s
+    {:
+        System.out.println("Adding statement to existing list");
+        ((Node) sl).addChild((Node) s);
+        RESULT = sl;
+    :};
+
+statement ::= expression:e SEMICOLON
+    {:
+        System.out.println("Creating expression statement");
+        RESULT = new Node("ExprStmt");
+        ((Node) RESULT).addChild((Node) e);
+    :}
+    | RETURN expression:e SEMICOLON
+    {:
+        System.out.println("Creating return statement with expression");
+        Node returnNode = new Node("Return");
+        returnNode.addChild((Node) e);
+        RESULT = returnNode;
+    :}
+    | RETURN SEMICOLON
+    {:
+        System.out.println("Creating void return statement");
+        RESULT = new Node("Return");
+    :}
+    | IF LPAREN expression:e RPAREN statement:s
+    {:
+        System.out.println("Creating if statement");
+        Node ifNode = new Node("If");
+        ifNode.addChild((Node) e);
+        ifNode.addChild((Node) s);
+        RESULT = ifNode;
+    :}
+    | IF LPAREN expression:e RPAREN statement:s1 ELSE statement:s2
+    {:
+        System.out.println("Creating if-else statement");
+        Node ifElseNode = new Node("IfElse");
+        ifElseNode.addChild((Node) e);
+        ifElseNode.addChild((Node) s1);
+        ifElseNode.addChild((Node) s2);
+        RESULT = ifElseNode;
+    :}
+    | FOR LPAREN expression:e1 SEMICOLON expression:e2 SEMICOLON expression:e3 RPAREN statement:s
+    {:
+        System.out.println("Creating for loop");
+        Node forNode = new Node("For");
+        forNode.addChild((Node) e1);
+        forNode.addChild((Node) e2);
+        forNode.addChild((Node) e3);
+        forNode.addChild((Node) s);
+        RESULT = forNode;
+    :}
+    | LBRACE statement_list:sl RBRACE
+    {:
+        RESULT = sl;
+    :};
+
+expression ::= term:t
+    {:
+        RESULT = t;
+    :}
+    | expression:e PLUS term:t
+    {:
+        Node plusNode = new Node("+");
+        plusNode.addChild((Node) e);
+        plusNode.addChild((Node) t);
+        RESULT = plusNode;
+    :}
+    | expression:e MINUS term:t
+    {:
+        Node minusNode = new Node("-");
+        minusNode.addChild((Node) e);
+        minusNode.addChild((Node) t);
+        RESULT = minusNode;
+    :}
+    | expression:e LESS term:t
+    {:
+        Node lessNode = new Node("<");
+        lessNode.addChild((Node) e);
+        lessNode.addChild((Node) t);
+        RESULT = lessNode;
+    :}
+    | expression:e LESSEQUAL term:t
+    {:
+        Node leqNode = new Node("<=");
+        leqNode.addChild((Node) e);
+        leqNode.addChild((Node) t);
+        RESULT = leqNode;
+    :}
+    | expression:e GREATER term:t
+    {:
+        Node greaterNode = new Node(">");
+        greaterNode.addChild((Node) e);
+        greaterNode.addChild((Node) t);
+        RESULT = greaterNode;
+    :}
+    | expression:e GREATEREQUAL term:t
+    {:
+        Node geqNode = new Node(">=");
+        geqNode.addChild((Node) e);
+        geqNode.addChild((Node) t);
+        RESULT = geqNode;
+    :}
+    | expression:e EQUALS term:t
+    {:
+        Node equalsNode = new Node("==");
+        equalsNode.addChild((Node) e);
+        equalsNode.addChild((Node) t);
+        RESULT = equalsNode;
+    :}
+    | expression:e AND term:t
+    {:
+        Node andNode = new Node("&&");
+        andNode.addChild((Node) e);
+        andNode.addChild((Node) t);
+        RESULT = andNode;
+    :}
+    | expression:e OR term:t
+    {:
+        Node orNode = new Node("||");
+        orNode.addChild((Node) e);
+        orNode.addChild((Node) t);
+        RESULT = orNode;
+    :}
+    | IDENTIFIER:id ASSIGN expression:e
+    {:
+        Node assignNode = new Node("=");
+        assignNode.addChild(new Node("Id:" + id));
+        assignNode.addChild((Node) e);
+        RESULT = assignNode;
+    :}
+    | IDENTIFIER:id INCREMENT
+    {:
+        Node incNode = new Node("++");
+        incNode.addChild(new Node("Id:" + id));
+        RESULT = incNode;
+    :}
+    | IDENTIFIER:id DECREMENT
+    {:
+        Node decNode = new Node("--");
+        decNode.addChild(new Node("Id:" + id));
+        RESULT = decNode;
+    :}
+    | INPUT_INT LPAREN RPAREN
+    {:
+        RESULT = new Node("input_int");
+    :}
+    | OUTPUT_INT LPAREN expression:e RPAREN
+    {:
+        Node outputNode = new Node("output_int");
+        outputNode.addChild((Node) e);
+        RESULT = outputNode;
+    :}
+    | TRUE
+    {:
+        RESULT = new Node("true");
+    :}
+    | FALSE
+    {:
+        RESULT = new Node("false");
+    :};
+
+term ::= factor:f
+    {:
+        RESULT = f;
+    :}
+    | term:t TIMES factor:f
+    {:
+        Node timesNode = new Node("*");
+        timesNode.addChild((Node) t);
+        timesNode.addChild((Node) f);
+        RESULT = timesNode;
+    :}
+    | term:t DIVIDE factor:f
+    {:
+        Node divNode = new Node("/");
+        divNode.addChild((Node) t);
+        divNode.addChild((Node) f);
+        RESULT = divNode;
+    :}
+    | term:t MOD factor:f
+    {:
+        Node modNode = new Node("%");
+        modNode.addChild((Node) t);
+        modNode.addChild((Node) f);
+        RESULT = modNode;
+    :};
+
+factor ::= INTEGER_LITERAL:i
+    {:
+        System.out.println("Creating integer literal node: " + i);
+        RESULT = new Node("IntLit:" + i.toString());
+    :}
+    | IDENTIFIER:id
+    {:
+        System.out.println("Creating identifier node: " + id);
+        RESULT = new Node("Id:" + id);
+    :}
+    | LPAREN expression:e RPAREN
+    {:
+        System.out.println("Creating parenthesized expression");
+        RESULT = e;
+    :};
