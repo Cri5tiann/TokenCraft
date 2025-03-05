@@ -225,9 +225,6 @@ Check for:
 - Mismatched parentheses
 </details>
 
-## 🆘 Getting Help
-- **Documentation**: See our [Technical Documentation][docs]
-
 
 ## 📄 License
 
