@@ -1,0 +1,59 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+*.hprof
+
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# Maven
+target/
+*.log
+
+# Gradle
+.gradle/
+build/
+
+# Spring Boot
+spring-boot-devtools/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Dependency directories
+node_modules/
+
+# Temporary files
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# IDE-specific
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# JetBrains Rider
+.idea/
+
+# Package Distribution
+*.tgz
