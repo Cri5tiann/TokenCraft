@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lexer-Parser Tree Viewer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/d3@7.8.0/dist/d3.min.js">
+    <script src="https://cdn.jsdelivr.net/npm/react@18.1.0/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.1.0/umd/react-dom.production.min.js"></script>
+</head>
+<body>
+<h1>Lexer-Parser Tree</h1>
+<div id="tree-view"></div>
+<button onclick="refreshTree()">Refresh Tree</button>
+
+<script>
+    async function fetchTreeData() {
+        const response = await fetch('/parse');
+        const treeData = await response.json();
+        return treeData;
+    }
+
+    function renderTree(treeData) {
+        const rootElement = document.getElementById("tree-view");
+        rootElement.innerHTML = ''; // Clear any existing content
+
+        const treeHtml = createTreeHtml(treeData);
+        rootElement.innerHTML = treeHtml;
+    }
+
+    function createTreeHtml(node) {
+        if (!node) return '';
+        let html = `<div class="node">${node.name}</div>`;
+        if (node.children && node.children.length > 0) {
+            html += `<div class="children">`;
+            node.children.forEach(child => {
+                html += createTreeHtml(child);
+            });
+            html += `</div>`;
+        }
+        return html;
+    }
+
+    async function refreshTree() {
+        const treeData = await fetchTreeData();
+        renderTree(treeData);
+    }
+
+    window.onload = refreshTree;
+</script>
+</body>
+</html>

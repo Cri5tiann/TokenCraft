@@ -1,0 +1,11 @@
+.node {
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.children {
+    margin-left: 20px;
+}
