@@ -9,5 +9,13 @@
         <module name="Lexer-Parser-PLT" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="TokenCraft" target="19" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Lexer-Parser-PLT" options="" />
+    </option>
   </component>
 </project>

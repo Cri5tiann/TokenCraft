@@ -24,10 +24,10 @@
         </dependency>
     </dependencies>
 
-
     <properties>
-        <maven.compiler.source>19</maven.compiler.source>
-        <maven.compiler.target>19</maven.compiler.target>
+        <java.version>17</java.version> <!-- Change Java version for better compatibility -->
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
 </project>

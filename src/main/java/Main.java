@@ -1,15 +1,22 @@
 import java_cup.runtime.Symbol;
 import lexer.Lexer;
-import utils.Node;
 import parser.Parser;
+import utils.Node;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 
-public class TestParser {
+public class Main {
     public static void main(String[] args) {
-        // Path to your .plt file
-        String filePath = "E:\\cod\\demo\\Lexer-Parser-PLT\\src\\main\\resources\\FibonacciNumbers.plt";
+        // Create a Scanner to read user input
+        Scanner scanner = new Scanner(System.in);
+
+        // Ask the user for the name of the file
+        System.out.print("Enter the name of the file (e.g., FibonacciNumbers.plt): ");
+        String fileName = scanner.nextLine().trim();
+
+        String filePath = "src/main/resources/" + fileName  + ".plt"; // Path to the resources folder
 
         try {
             // Create a FileReader to read the .plt file
