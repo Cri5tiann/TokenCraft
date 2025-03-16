@@ -1,86 +1,26 @@
-# TokenCraft 🔄
-
-<div align="center">
-
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=flat&logo=openjdk&logoColor=white)](https://www.java.com/)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/yourusername/TokenCraft)
-
-</div>
-
----
-
-> A user-friendly programming language compiler with clear syntax and easy-to-understand output.
-
-<details>
-<summary>📋 Table of Contents</summary>
-
-- [What is TokenCraft?](#what-is-tokencraft)
-- [Features](#-features)
-- [Quick Start](#-quick-start)
-- [Writing PLT Programs](#-writing-plt-programs)
-- [Examples](#-examples)
-- [Common Questions](#-common-questions)
-- [Getting Help](#-getting-help)
-- [Contributing](#-contributing)
-- [License](#-license)
-
-</details>
 
 ## What is TokenCraft?
 
 TokenCraft is a programming language tool that helps you write and understand code better. It takes your code written in PLT (Programming Language TokenCraft) and turns it into a clear, visual representation that shows how your program is structured.
 
-## ✨ Features
 
-- **Easy to Write**
-  - Simple, clean syntax similar to popular programming languages
-  - Intuitive control structures
-  - Straightforward function declarations
 
-- **Visual Output**
-  - Tree-like diagrams of program structure
-  - Clear representation of code hierarchy
-  - Easy-to-follow program flow
-
-- **Helpful Errors**
-  - Precise error locations
-  - Clear error descriptions
-  - Suggested fixes
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/TokenCraft.git
+git clone https://github.com/Cri5tiann/TokenCraft.git
 
 # Navigate to project directory
-cd TokenCraft
+cd java
 
 # Build the project
-./build.sh  # or build.bat on Windows
+run the Main class and see what a great small project I built))
 ```
 
-### First Program
-
-1. Create a file `hello.plt`:
-
-   ```plt
-   function main() {
-       x = input_int();
-       output_int(x * 2);
-   }
-   ```
-
-2. Run it:
-
-   ```bash
-   java TokenCraft hello.plt
-   ```
-
-## 📝 Writing PLT Programs
+## Writing PLT Programs
 
 ### Basic Syntax
 
@@ -168,7 +108,7 @@ for (i = 0; i < 10; i++) {
 `--`
 |
 
-## 🔍 Examples
+## Examples
 
 <details>
 <summary>Calculator Program</summary>
@@ -204,7 +144,7 @@ function main() {
 ```
 </details>
 
-## ❓ Common Questions
+## Common Questions
 
 <details>
 <summary><b>How do I input multiple numbers?</b></summary>
@@ -224,11 +164,6 @@ Check for:
 - Missing curly braces (`{}`)
 - Mismatched parentheses
 </details>
-
-
-## 📄 License
-
-TokenCraft is MIT licensed. See [LICENSE](LICENSE) for details.
 
 ---
 
